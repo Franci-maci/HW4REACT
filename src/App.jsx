@@ -1,52 +1,33 @@
-import React, { useState } from "react";
-import NavBar from "./NavBar";
-import Body from "./Body";
-import Footer from "./Footer";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-const navLinks = [
-  { id: 1, name: "Home", url: "/" },
-  { id: 2, name: "About", url: "/about" },
-  { id: 3, name: "Services", url: "/services" },
-  { id: 4, name: "Contact", url: "/contact" },
-];
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
+import About from "./pages/About";
+import Services from "./pages/Services";
+import Contact from "./pages/Contact";
+import NotFound from "./pages/NotFound";
 
-const pageContent = {
-  Home: {
-    heading: "Welcome to Home",
-    paragraph: "This is the home page content.",
-  },
-  About: {
-    heading: "About Us",
-    paragraph: "Here is some information about us.",
-  },
-  Services: {
-    heading: "Our Services",
-    paragraph: "Details about our services.",
-  },
-  Contact: {
-    heading: "Contact Us",
-    paragraph: "How to reach us.",
-  },
-};
+import { navLinks } from "./data/siteData";
 
-function App() {
-  const [activePage, setActivePage] = useState("Home");
-
-  const handleNavClick = (pageName) => {
-    setActivePage(pageName);
-  };
-
+export default function App() {
   return (
-    <div>
-      <NavBar
-        links={navLinks}
-        onNavClick={handleNavClick}
-        activePage={activePage}
-      />
-      <Body content={pageContent[activePage]} />
-      <Footer />
-    </div>
+    <Router>
+      {/* Pass navLinks as props so NavBar is driven by data */}
+      <NavBar links={navLinks} />
+
+      {/* Main content area */}
+      <div style={{ padding: "20px" }}>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/contact" element={<Contact />} />
+
+          {/* catch-all 404 route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
-export default App;
